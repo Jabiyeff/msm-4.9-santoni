@@ -24,7 +24,6 @@
 #include <media/videobuf2-core.h>
 #include <media/v4l2-mem2mem.h>
 #include <media/msm_jpeg_dma-legacy.h>
-
 #include "msm_jpeg_dma_dev.h"
 #include "msm_jpeg_dma_hw.h"
 #include "cam_hw_ops.h"
