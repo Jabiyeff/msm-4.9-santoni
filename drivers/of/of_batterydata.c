@@ -390,6 +390,9 @@ struct device_node *of_batterydata_get_best_profile(
 				}
 			}
 		}
+	}
+
+	if (best_node == NULL) {
 		pr_err("No battery data found\n");
 		return best_node;
 	}

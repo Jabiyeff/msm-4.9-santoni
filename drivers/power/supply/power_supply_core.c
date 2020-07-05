@@ -161,8 +161,15 @@ int power_supply_get_battery_charge_state(struct power_supply *psy)
 {
 	union power_supply_propval ret = {0,};
 
- 	if (psy->desc->get_property)
-		psy->desc->get_property(psy, POWER_SUPPLY_PROP_PRESENT, &ret);
+	if (!psy) {
+		pr_err("power supply is NULL\n");
+	}
+
+	if (psy->desc->get_property) {
+		psy->desc->get_property(psy, POWER_SUPPLY_PROP_PRESENT,  &ret);
+	}
+
+	pr_debug("online:%d\n", ret.intval);
 
 	return ret.intval;
 }
