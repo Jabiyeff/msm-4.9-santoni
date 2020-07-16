@@ -605,7 +605,7 @@ static int ep_scan_ready_list(struct eventpoll *ep,
 					   struct list_head *, void *),
 			      void *priv, int depth, bool ep_locked)
 {
-	int error, pwake = 0;
+	int error;
 	unsigned long flags;
 	struct epitem *epi, *nepi;
 	LIST_HEAD(txlist);
@@ -667,25 +667,10 @@ static int ep_scan_ready_list(struct eventpoll *ep,
 	 */
 	list_splice(&txlist, &ep->rdllist);
 	__pm_relax(ep->ws);
-
-	if (!list_empty(&ep->rdllist)) {
-		/*
-		 * Wake up (if active) both the eventpoll wait list and
-		 * the ->poll() wait list (delayed after we release the lock).
-		 */
-		if (waitqueue_active(&ep->wq))
-			wake_up_locked(&ep->wq);
-		if (waitqueue_active(&ep->poll_wait))
-			pwake++;
-	}
 	spin_unlock_irqrestore(&ep->lock, flags);
 
 	if (!ep_locked)
 		mutex_unlock(&ep->mtx);
-
-	/* We have to call this outside the lock */
-	if (pwake)
-		ep_poll_safewake(&ep->poll_wait);
 
 	return error;
 }
